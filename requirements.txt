@@ -1,4 +1,5 @@
-numpy
-pandas
-flask
-langchain
+ollama
+transformers
+torch
+faiss-cpu
+sentence-transformers
