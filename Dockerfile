@@ -41,3 +41,5 @@ ENV PATH="/app/venv/bin:$PATH"
 
 # Comando di avvio
 CMD ["python", "app.py"]
+
+# Puoi testare l'API inviando una richiesta POST a http://localhost:5000/query con un payload JSON contenente il campo prompt.
