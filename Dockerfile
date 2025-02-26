@@ -1,45 +1,17 @@
-# Fase 1: Costruzione dell'ambiente base
-FROM ubuntu:22.04 AS base
+# Usa un'immagine base di Python
+FROM python:3.9-slim
 
-# Impostazioni per evitare errori relativi a `debconf`
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Aggiornamento del sistema e installazione delle dipendenze
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    wget \
-    git \
-    python3 \
-    python3-pip \
-    python3-venv \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Installazione di Ollama
-RUN curl https://ollama.ai/install.sh | sh
-
-# Creazione di una directory per l'applicazione
+# Imposta la directory di lavoro nel container
 WORKDIR /app
 
-# Copia del file requirements.txt (se necessario)
+# Copia il file requirements.txt nella directory di lavoro
 COPY requirements.txt .
 
-# Installazione delle dipendenze Python
-RUN python3 -m venv venv && \
-    . venv/bin/activate && \
-    pip install --upgrade pip && \
-    pip install -r requirements.txt
+# Installa le dipendenze
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Fase 2: Copia del codice sorgente
+# Copia il codice sorgente nella directory di lavoro
 COPY . .
 
-# Impostazione della variabile d'ambiente per attivare il virtualenv
-ENV PATH="/app/venv/bin:$PATH"
-
-# Comando di avvio
-CMD ["python", "app.py"]
-
-# Puoi testare l'API inviando una richiesta POST a http://localhost:5000/query con un payload JSON contenente il campo prompt.
+# Esegui lo script principale al lancio del container
+CMD ["python", "rag_script.py"]
